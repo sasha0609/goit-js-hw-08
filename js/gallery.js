@@ -65,7 +65,7 @@ const images = [
 ];
 
 const list = document.querySelector('.gallery');
-const saveItems = [];
+// const saveItems = [];
 
 for (let index = 0; index < images.length; index++) {
   const newItemOfList = document.createElement('li');
@@ -80,7 +80,7 @@ for (let index = 0; index < images.length; index++) {
   newImg.alt = images[index].description;
   newImg.dataset.source = images[index].original;
 
-  saveItems.push(newItemOfList);
+  //   saveItems.push(newItemOfList);
 
   newItemOfList.append(newLink);
 
@@ -94,7 +94,20 @@ list.addEventListener('click', event => {
   //   const clickedElement = event.target.dataset.source;
   //   console.log(clickedElement);
   const instance = basicLightbox.create(
-    `<img src='${event.target.dataset.source}' width='800' height='600'>`
+    `<img src='${event.target.dataset.source}' width='800' height='600'>`,
+    {
+      onShow: instance => {
+        document.addEventListener('keydown', handleKeyPress);
+      },
+      onClose: instance => {
+        document.removeEventListener('keydown', handleKeyPress);
+      },
+    }
   );
   instance.show();
+  function handleKeyPress(e) {
+    if (e.key === 'Escape') {
+      instance.close();
+    }
+  }
 });
